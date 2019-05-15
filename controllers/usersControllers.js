@@ -1,6 +1,7 @@
 const { fetchAllUsers, fetchUserById } = require('../models/usersModels');
 
 exports.getAllUsers = (req, res, next) => {
+  console.log('in controller')
   fetchAllUsers()
     .then(users => res.send({ users }))
     .catch(next);

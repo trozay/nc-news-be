@@ -1,15 +1,17 @@
 const connection = require('../db/connection');
 
-exports.fetchAllArticles = ({ sort_by = 'articles.created_at', order = 'desc', author, topic }) => {
+exports.fetchAllArticles = ({ sort_by = 'articles.created_at', order = 'desc', author, topic, limit = 10, p }) => {
   return connection.select('articles.article_id', 'articles.title', 'articles.author', 'articles.topic', 'articles.votes', 'articles.created_at')
     .count('comments.article_id as comment_count')
     .from('articles')
     .leftJoin('comments', 'comments.article_id', 'articles.article_id')
     .modify(query => {
       if (author) query.where('articles.author', author);
-      if (topic) query.where('articles.topic', topic)
+      if (topic) query.where('articles.topic', topic);
+      if (p) query.offset(limit)
     })
     .groupBy('articles.article_id')
+    .limit(limit)
     .orderBy(sort_by, order)
 };
 
