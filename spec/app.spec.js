@@ -11,40 +11,40 @@ describe('/', () => {
   after(() => connection.destroy());
 
   describe('/api', () => {
-    // it('GET status:200 - returns with a JSON object with all available endpoints', () => {
-    //   return request(app)
-    //     .get('/api')
-    //     .expect(200)
-    //     .then(({ body }) => {
-    //       expect(body.endpoints).to.eql({
-    //         "GET /api": {
-    //           "description": "serves up a json representation of all the available endpoints of the api"
-    //         },
-    //         "GET /api/topics": {
-    //           "description": "serves an array of all topics",
-    //           "queries": [],
-    //           "exampleResponse": {
-    //             "topics": [{ "slug": "football", "description": "Footie!" }]
-    //           }
-    //         },
-    //         "GET /api/articles": {
-    //           "description": "serves an array of all topics",
-    //           "queries": ["author", "topic", "sort_by", "order"],
-    //           "exampleResponse": {
-    //             "articles": [
-    //               {
-    //                 "title": "Seafood substitutions are increasing",
-    //                 "topic": "cooking",
-    //                 "author": "weegembump",
-    //                 "body": "Text from the article..",
-    //                 "created_at": 1527695953341
-    //               }
-    //             ]
-    //           }
-    //         }
-    //       });
-    //     });
-    // });
+    it.only('GET status:200 - returns with a JSON object with all available endpoints', () => {
+      return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.endpoints).to.eql({
+            "GET /api": {
+              "description": "serves up a json representation of all the available endpoints of the api"
+            },
+            "GET /api/topics": {
+              "description": "serves an array of all topics",
+              "queries": [],
+              "exampleResponse": {
+                "topics": [{ "slug": "football", "description": "Footie!" }]
+              }
+            },
+            "GET /api/articles": {
+              "description": "serves an array of all topics",
+              "queries": ["author", "topic", "sort_by", "order"],
+              "exampleResponse": {
+                "articles": [
+                  {
+                    "title": "Seafood substitutions are increasing",
+                    "topic": "cooking",
+                    "author": "weegembump",
+                    "body": "Text from the article..",
+                    "created_at": 1527695953341
+                  }
+                ]
+              }
+            }
+          });
+        });
+    });
 
     describe('PageNotFound', () => {
       it('returns 404 when given a bad path', () => {
@@ -399,7 +399,7 @@ describe('/', () => {
       describe('Error deleting', () => {
         it('DELETE status:400 - returns Bad Request when passed an invalid comment id', () => {
           return request(app)
-            .delete('/api/comments/invalid_comment_id')
+            .delete('/api/comments/invalid_comment_id');
         });
       });
     });
