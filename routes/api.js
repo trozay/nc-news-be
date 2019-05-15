@@ -3,6 +3,7 @@ const { methodNotAllowed } = require('../errors');
 const articlesRouter = require('./articlesRouter');
 const commentsRouter = require('./commentsRouter');
 const topicsRouter = require('./topicsRouter');
+const usersRouter = require('./usersRouter');
 
 apiRouter
   .route('/')
@@ -13,6 +14,8 @@ apiRouter.use('/topics', topicsRouter);
 
 apiRouter.use('/articles', articlesRouter);
 
-apiRouter.use('/comments', commentsRouter)
+apiRouter.use('/comments', commentsRouter);
+
+apiRouter.use('/users', usersRouter);
 
 module.exports = apiRouter;
