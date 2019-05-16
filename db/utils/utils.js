@@ -33,3 +33,8 @@ exports.formatArr = (arr, ref) => {
     }
   });
 };
+
+exports.pagination = (items, limit, page) => {
+  const startingPoint = (page - 1) * limit;
+  return items.filter((item, index) => index >= startingPoint && index < startingPoint + 5);
+};

@@ -1,7 +1,13 @@
 const { expect } = require('chai')
-const { convertTimeStamp, createRef, renameKeys, formatArr } = require('../db/utils/utils');
+const { convertTimeStamp, createRef, renameKeys, formatArr, pagination } = require('../db/utils/utils');
 const articleData = require('../db/data/test-data/articles');
 const commentData = require('../db/data/test-data/comments');
+
+describe('pagination', () => {
+  it('gives the page specified calculated using the limit', () => {
+    expect(pagination([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 5, 3)).to.eql([11, 12, 13, 14, 15]);
+  });
+});
 
 
 describe('convertTimeStamp', () => {

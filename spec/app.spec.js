@@ -84,7 +84,7 @@ describe('/', () => {
           .send({})
           .expect(400)
           .then(({ body }) => {
-            expect(body.msg).to.eql('Invalid Input');
+            expect(body.msg).to.eql('Input cannot be null');
           });
       });
     });
@@ -124,6 +124,45 @@ describe('/', () => {
             expect(body.articles[0].author).to.eql('rogersop')
           });
       });
+      it('GET status:200 - returns an array of article objects starting from the page specified and only the limit amount', () => {
+        return request(app)
+          .get('/api/articles?limit=3&p=3')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles).to.have.lengthOf(3);
+            expect(body.articles).to.eql([{
+              article_id: 7,
+              title: 'Z',
+              topic: 'mitch',
+              author: 'icellusedkars',
+              body: 'I was hungry.',
+              votes: 0,
+              created_at: "1994-10-20T23:00:00.000Z",
+              comment_count: "0"
+            },
+            {
+              article_id: 8,
+              title: 'Does Mitch predate civilisation?',
+              topic: 'mitch',
+              author: 'icellusedkars',
+              body:
+                'Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!',
+              votes: 0,
+              created_at: "1990-10-21T23:00:00.000Z",
+              comment_count: "0"
+            },
+            {
+              article_id: 9,
+              title: "They're not exactly dogs, are they?",
+              topic: 'mitch',
+              author: 'butter_bridge',
+              body: 'Well? Think about it.',
+              votes: 0,
+              created_at: "1986-10-22T23:00:00.000Z",
+              comment_count: "2"
+            }])
+          });
+      });
       it('POST status:201 - returns an object with the article that was created', () => {
         return request(app)
           .post('/api/articles')
@@ -139,7 +178,7 @@ describe('/', () => {
           .send({ title: 'A new article', topic: 'paper', author: 'lurker' })
           .expect(400)
           .then(({ body }) => {
-            expect(body.msg).to.eql('Invalid Input');
+            expect(body.msg).to.eql('Input cannot be null');
           });
       });
       it('PUT status:405 - returns Method Not Allowed', () => {
@@ -153,12 +192,12 @@ describe('/', () => {
       });
       describe('Bad querys', () => {
         describe('Column Does not exist', () => {
-          it('GET status:404 - returns Column does not exist', () => {
+          it('GET status:400 - returns Column does not exist', () => {
             return request(app)
               .get('/api/articles?sort_by=length')
-              .expect(404)
+              .expect(400)
               .then(({ body }) => {
-                expect(body.msg).to.eql('Not Found');
+                expect(body.msg).to.eql('Column Not Defined');
               });
           });
         });
@@ -209,13 +248,10 @@ describe('/', () => {
               expect(body.article.votes).to.eql(95)
             })
         });
-        it('DELETE status:200', () => {
+        it('DELETE status:204', () => {
           return request(app)
             .delete('/api/articles/1')
-            .expect(200)
-            .then(({ text }) => {
-              expect(text).to.eql('Deleted Article!');
-            });
+            .expect(204)
         });
         describe('Invalid article ids', () => {
           it('GET status:400 - returns Not Found when passed an invalid id', () => {
@@ -280,6 +316,14 @@ describe('/', () => {
                 expect(body.comments).to.have.lengthOf(13);
               })
           });
+          it('GET status:404 - returns an empty array when passed a valid id that doesn\'t have any comments', () => {
+            return request(app)
+              .get('/api/articles/2/comments')
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comments).to.eql([]);
+              });
+          });
           it('POST status:201 and returns an array with the comments added to the database', () => {
             return request(app)
               .post('/api/articles/1/comments')
@@ -302,9 +346,17 @@ describe('/', () => {
             it('GET status:404 - returns Not Found when passed a valid id that doesn\'t exist', () => {
               return request(app)
                 .get('/api/articles/9999/comments')
-                .expect(404)
+                .expect(200)
                 .then(({ body }) => {
-                  expect(body.msg).to.eql('Not Found');
+                  expect(body.comments).to.eql([]);
+                });
+            });
+            it('GET status:404 - returns Column Not Defined when passed an invalid id', () => {
+              return request(app)
+                .get('/api/articles/invalid_id/comments?sort_by=not_a_valid_column')
+                .expect(400)
+                .then(({ body }) => {
+                  expect(body.msg).to.eql('Column Not Defined');
                 });
             });
           });
@@ -324,7 +376,7 @@ describe('/', () => {
                 .send({ username: 'lurker', body: null })
                 .expect(400)
                 .then(({ body }) => {
-                  expect(body.msg).to.eql('Invalid Input');
+                  expect(body.msg).to.eql('Input cannot be null');
                 });
             });
           });
@@ -345,7 +397,7 @@ describe('/', () => {
         it('DELETE status:200', () => {
           return request(app)
             .delete('/api/comments/18')
-            .expect(200)
+            .expect(204)
         });
       });
       describe('Method Not Allowed', () => {

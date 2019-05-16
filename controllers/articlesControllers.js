@@ -29,7 +29,6 @@ exports.patchArticleById = (req, res, next) => {
 exports.getCommentsByArticleId = (req, res, next) => {
   fetchCommentsByArticleId(req.params, req.query)
     .then(comments => {
-      if (comments.length === 0) return Promise.reject({ code: 404 });
       res.send({ comments })
     })
     .catch(next);
@@ -53,7 +52,7 @@ exports.deleteArticleById = (req, res, next) => {
   removeArticleById(req.params)
     .then(numOfDeletions => {
       if (numOfDeletions < 1) return Promise.reject({ code: 404 })
-      res.status(200).send('Deleted Article!');
+      res.sendStatus(204);
     })
     .catch(next);
 };

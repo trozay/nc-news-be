@@ -13,7 +13,7 @@ exports.deleteCommentById = (req, res, next) => {
   removeCommentById(req.params)
     .then((numOfDeletions) => {
       if (numOfDeletions === 0) return Promise.reject({ code: 404 });
-      res.sendStatus(200);
+      res.sendStatus(204);
     })
     .catch(next);
 };
