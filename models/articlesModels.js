@@ -34,10 +34,17 @@ exports.updateArticleById = ({ article_id }, { inc_votes }) => {
     .returning('*');
 };
 
-exports.fetchCommentsByArticleId = ({ article_id }, { sort_by = 'created_at', order = 'desc' }) => {
+exports.fetchCommentsByArticleId = ({ article_id }, { sort_by = 'created_at', order = 'desc', limit = 10, p }) => {
   return connection('comments').select('comment_id', 'author', 'votes', 'created_at', 'body')
     .where('comments.article_id', article_id)
-    .orderBy(sort_by, order);
+    .modify(query => {
+      if (p) {
+        const startingPoint = (p - 1) * limit;
+        query.offset(startingPoint);
+      };
+    })
+    .orderBy(sort_by, order)
+    .limit(limit)
 };
 
 exports.insertCommentByArticleId = ({ article_id }, { username, body }) => {

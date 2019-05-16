@@ -334,6 +334,14 @@ describe('/', () => {
                 expect(body.comment.article_id).to.eql(1);
               })
           });
+          it('GET status:200 - returns an array of comments accepting page and limit querys', () => {
+            return request(app)
+              .get('/api/articles/1/comments?limit=4&p=3')
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comments).to.have.lengthOf(4);
+              });
+          });
           describe('Invalid article ids', () => {
             it('GET status:404 - returns Bad Request when passed an invalid id', () => {
               return request(app)
