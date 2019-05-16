@@ -1,7 +1,6 @@
 const connection = require('../db/connection');
 
 exports.fetchAllUsers = () => {
-  console.log('in model')
   return connection('users').select('*');
 };
 

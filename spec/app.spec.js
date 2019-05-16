@@ -11,41 +11,6 @@ describe('/', () => {
   after(() => connection.destroy());
 
   describe('/api', () => {
-    it.only('GET status:200 - returns with a JSON object with all available endpoints', () => {
-      return request(app)
-        .get('/api')
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.endpoints).to.eql({
-            "GET /api": {
-              "description": "serves up a json representation of all the available endpoints of the api"
-            },
-            "GET /api/topics": {
-              "description": "serves an array of all topics",
-              "queries": [],
-              "exampleResponse": {
-                "topics": [{ "slug": "football", "description": "Footie!" }]
-              }
-            },
-            "GET /api/articles": {
-              "description": "serves an array of all topics",
-              "queries": ["author", "topic", "sort_by", "order"],
-              "exampleResponse": {
-                "articles": [
-                  {
-                    "title": "Seafood substitutions are increasing",
-                    "topic": "cooking",
-                    "author": "weegembump",
-                    "body": "Text from the article..",
-                    "created_at": 1527695953341
-                  }
-                ]
-              }
-            }
-          });
-        });
-    });
-
     describe('PageNotFound', () => {
       it('returns 404 when given a bad path', () => {
         return request(app)
@@ -101,6 +66,27 @@ describe('/', () => {
             })
           });
       });
+      it('POST status:201 - returns an object of the topic that was created', () => {
+        return request(app)
+          .post('/api/topics')
+          .send({ slug: 'coding', description: 'What computers need' })
+          .expect(201)
+          .then(({ body }) => {
+            expect(body.topic).to.eql({
+              slug: 'coding',
+              description: 'What computers need'
+            });
+          });
+      });
+      it('POST status:400 - when not given all the arguments needed', () => {
+        return request(app)
+          .post('/api/topics')
+          .send({})
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.eql('Invalid Input');
+          });
+      });
     });
     describe('articles', () => {
       it('GET status:200 - returns an array of article objects', () => {
@@ -109,7 +95,7 @@ describe('/', () => {
           .expect(200)
           .then(({ body }) => {
             expect(body.articles[0]).to.haveOwnProperty('comment_count');
-            expect(body.articles).to.have.lengthOf(12)
+            expect(body.articles).to.have.lengthOf(10)
           });
       });
       it('GET status:200 - returns an array of article objects that has been sorted by the query given', () => {
@@ -117,7 +103,7 @@ describe('/', () => {
           .get('/api/articles?sort_by=article_id')
           .expect(200)
           .then(({ body }) => {
-            expect(body.articles).to.be.sorted();
+            expect(body.articles).to.be.sorted('article_id');
           });
       });
       it('GET status:200 - returns an array of article objects that has the topic of the query given', () => {
@@ -138,6 +124,24 @@ describe('/', () => {
             expect(body.articles[0].author).to.eql('rogersop')
           });
       });
+      it('POST status:201 - returns an object with the article that was created', () => {
+        return request(app)
+          .post('/api/articles')
+          .send({ title: 'A new article', body: 'This is a brand new article i\'m going to post', topic: 'paper', author: 'lurker' })
+          .expect(201)
+          .then(({ body }) => {
+            expect(body.article).to.eql({ article_id: 13, title: 'A new article', body: 'This is a brand new article i\'m going to post', topic: 'paper', votes: 0, author: 'lurker', created_at: '2019-05-15T23:00:00.000Z' })
+          });
+      });
+      it('POST status:400 - returns an Invalid Input when not given all the arguments to insert', () => {
+        return request(app)
+          .post('/api/articles')
+          .send({ title: 'A new article', topic: 'paper', author: 'lurker' })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.eql('Invalid Input');
+          });
+      });
       it('PUT status:405 - returns Method Not Allowed', () => {
         return request(app)
           .put('/api/articles')
@@ -149,30 +153,30 @@ describe('/', () => {
       });
       describe('Bad querys', () => {
         describe('Column Does not exist', () => {
-          it('GET status:400 - returns Column does not exist', () => {
+          it('GET status:404 - returns Column does not exist', () => {
             return request(app)
               .get('/api/articles?sort_by=length')
-              .expect(400)
+              .expect(404)
               .then(({ body }) => {
-                expect(body.msg).to.eql('Column does not exist');
+                expect(body.msg).to.eql('Not Found');
               });
           });
         });
         describe('Topic/Author given is not in the database', () => {
-          it('GET status:400 - returns Bad Request', () => {
+          it('GET status:400 - returns Not Found', () => {
             return request(app)
               .get('/api/articles?author=not_a_valid_username')
-              .expect(400)
+              .expect(404)
               .then(({ body }) => {
-                expect(body.msg).to.eql('Bad Request');
+                expect(body.msg).to.eql('Not Found');
               });
           });
-          it('GET status:400 - returns Bad Request', () => {
+          it('GET status:404 - returns Not Found', () => {
             return request(app)
               .get('/api/articles?topic=not_a_valid_topic')
-              .expect(400)
+              .expect(404)
               .then(({ body }) => {
-                expect(body.msg).to.eql('Bad Request');
+                expect(body.msg).to.eql('Not Found');
               });
           });
         });
@@ -183,9 +187,8 @@ describe('/', () => {
             .get('/api/articles/1')
             .expect(200)
             .then(({ body }) => {
-              expect(body.article).to.have.lengthOf(1);
-              expect(body.article[0]).to.haveOwnProperty('comment_count');
-              expect(body.article[0]).to.eql({
+              expect(body.article).to.haveOwnProperty('comment_count');
+              expect(body.article).to.eql({
                 article_id: 1,
                 title: 'Living in the shadow of a great man',
                 topic: 'mitch',
@@ -197,18 +200,25 @@ describe('/', () => {
               });
             });
         });
-        it('PATCH status:202 and returns an array with the updated object', () => {
+        it('PATCH status:200 and returns an array with the updated object', () => {
           return request(app)
             .patch('/api/articles/1')
             .send({ inc_votes: -5 })
-            .expect(202)
+            .expect(200)
             .then(({ body }) => {
-              expect(body.article).to.have.lengthOf(1);
-              expect(body.article[0].votes).to.eql(95)
+              expect(body.article.votes).to.eql(95)
             })
         });
+        it('DELETE status:200', () => {
+          return request(app)
+            .delete('/api/articles/1')
+            .expect(200)
+            .then(({ text }) => {
+              expect(text).to.eql('Deleted Article!');
+            });
+        });
         describe('Invalid article ids', () => {
-          it('GET status:400 - returns Invalid Input when passed an invalid id', () => {
+          it('GET status:400 - returns Not Found when passed an invalid id', () => {
             return request(app)
               .get('/api/articles/invalid_id')
               .expect(400)
@@ -216,13 +226,29 @@ describe('/', () => {
                 expect(body.msg).to.eql('Invalid Input');
               });
           });
-          it('GET status:400 - returns Bad Request when passed a valid id that doesn\'t exist', () => {
+          it('GET status:404 - returns Not Found when passed a valid id that doesn\'t exist', () => {
             return request(app)
               .get('/api/articles/9999')
+              .expect(404)
+              .then(({ body }) => {
+                expect(body.msg).to.eql('Not Found');
+              });
+          });
+          it('DELETE status: 404 - when given a valid id that doesn\'t exist', () => {
+            return request(app)
+              .delete('/api/articles/9999')
+              .expect(404)
+              .then(({ body }) => {
+                expect(body.msg).to.eql('Not Found')
+              })
+          });
+          it('DELETE status: 400 - when given a valid id that doesn\'t exist', () => {
+            return request(app)
+              .delete('/api/articles/not_a_valid_id')
               .expect(400)
               .then(({ body }) => {
-                expect(body.msg).to.eql('Bad Request');
-              });
+                expect(body.msg).to.eql('Invalid Input')
+              })
           });
         });
         describe('Invalid increment vote object', () => {
@@ -251,7 +277,7 @@ describe('/', () => {
               .get('/api/articles/1/comments')
               .expect(200)
               .then(({ body }) => {
-                expect(body.articles).to.have.lengthOf(13);
+                expect(body.comments).to.have.lengthOf(13);
               })
           });
           it('POST status:201 and returns an array with the comments added to the database', () => {
@@ -260,13 +286,12 @@ describe('/', () => {
               .send({ username: 'lurker', body: 'Great article' })
               .expect(201)
               .then(({ body }) => {
-                expect(body.article).to.have.lengthOf(1);
-                expect(body.article[0].author).to.eql('lurker');
-                expect(body.article[0].article_id).to.eql(1);
+                expect(body.comment.author).to.eql('lurker');
+                expect(body.comment.article_id).to.eql(1);
               })
           });
           describe('Invalid article ids', () => {
-            it('GET status:400 - returns Invalid Input when passed an invalid id', () => {
+            it('GET status:404 - returns Bad Request when passed an invalid id', () => {
               return request(app)
                 .get('/api/articles/invalid_id/comments')
                 .expect(400)
@@ -274,23 +299,23 @@ describe('/', () => {
                   expect(body.msg).to.eql('Invalid Input');
                 });
             });
-            it('GET status:400 - returns Bad Request when passed a valid id that doesn\'t exist', () => {
+            it('GET status:404 - returns Not Found when passed a valid id that doesn\'t exist', () => {
               return request(app)
                 .get('/api/articles/9999/comments')
-                .expect(400)
+                .expect(404)
                 .then(({ body }) => {
-                  expect(body.msg).to.eql('Bad Request');
+                  expect(body.msg).to.eql('Not Found');
                 });
             });
           });
           describe('Invalid post request', () => {
-            it('POST status:400 - returns Foreign Key Violation when passed and invalid username', () => {
+            it('POST status:400 - returns Not Found when passed and invalid username', () => {
               return request(app)
                 .post('/api/articles/1/comments')
                 .send({ username: 123, body: 'An article' })
-                .expect(400)
+                .expect(404)
                 .then(({ body }) => {
-                  expect(body.msg).to.eql('Foreign Key Violation');
+                  expect(body.msg).to.eql('Not Found');
                 });
             });
             it('POST status:400 - returns Invalid Input when passed an invalid body', () => {
@@ -299,7 +324,7 @@ describe('/', () => {
                 .send({ username: 'lurker', body: null })
                 .expect(400)
                 .then(({ body }) => {
-                  expect(body.msg).to.eql('Input Cannot Be Null');
+                  expect(body.msg).to.eql('Invalid Input');
                 });
             });
           });
@@ -308,19 +333,19 @@ describe('/', () => {
     });
     describe('comments', () => {
       describe('/:comment_id', () => {
-        it('PATCH status:201 and returns an array with the comment that was updated', () => {
+        it('PATCH status:200 and returns an array with the comment that was updated', () => {
           return request(app)
             .patch('/api/comments/1')
             .send({ inc_votes: 5 })
-            .expect(201)
+            .expect(200)
             .then(({ body }) => {
-              expect(body.comment).to.have.lengthOf(1);
+              expect(body.comment.votes).to.eql(21);
             })
         });
-        it('DELETE status:204 and returns an array with the comment that was deleted', () => {
+        it('DELETE status:200', () => {
           return request(app)
             .delete('/api/comments/18')
-            .expect(204)
+            .expect(200)
         });
       });
       describe('Method Not Allowed', () => {
@@ -363,43 +388,29 @@ describe('/', () => {
               expect(body.msg).to.eql('Invalid Input');
             });
         });
-        it('PATCH status:400 - returns Bad Request when passed a valid id that doesn\'t exist', () => {
+        it('PATCH status:404 - returns Bad Request when passed a valid id that doesn\'t exist', () => {
           return request(app)
             .patch('/api/comments/9999')
-            .expect(400)
+            .expect(404)
             .then(({ body }) => {
-              expect(body.msg).to.eql('Bad Request');
+              expect(body.msg).to.eql('Not Found');
             });
         });
         it('DELETE status:400 - returns Invalid Input when passed an invalid id', () => {
           return request(app)
-            .patch('/api/comments/invalid_comment_id')
+            .delete('/api/comments/invalid_comment_id')
             .expect(400)
             .then(({ body }) => {
               expect(body.msg).to.eql('Invalid Input');
             });
         });
-        it('DELETE status:400 - returns Bad Request when passed a valid id that doesn\'t exist', () => {
+        it('DELETE status:404 - returns Bad Request when passed a valid id that doesn\'t exist', () => {
           return request(app)
-            .patch('/api/comments/9999')
-            .expect(400)
+            .delete('/api/comments/9999')
+            .expect(404)
             .then(({ body }) => {
-              expect(body.msg).to.eql('Bad Request');
+              expect(body.msg).to.eql('Not Found');
             });
-        });
-        it('DELETE status:400 - returns Invalid Input when passed a invalid id ', () => {
-          return request(app)
-            .patch('/api/comments/invalid_comment_id')
-            .expect(400)
-            .then(({ body }) => {
-              expect(body.msg).to.eql('Invalid Input');
-            });
-        });
-      });
-      describe('Error deleting', () => {
-        it('DELETE status:400 - returns Bad Request when passed an invalid comment id', () => {
-          return request(app)
-            .delete('/api/comments/invalid_comment_id');
         });
       });
     });
@@ -427,16 +438,24 @@ describe('/', () => {
             .get('/api/users/lurker')
             .expect(200)
             .then(({ body }) => {
-              expect(body.user).to.have.lengthOf(1);
+              expect(body.user.username).to.eql('lurker');
             });
         });
         describe('Invalid username', () => {
-          it('GET status:400 - returns Bad Request when passed a username that doesn\'t exist', () => {
+          it('GET status:404 - returns Bad Request when passed an invalid username that doesn\'t exist', () => {
             return request(app)
               .get('/api/users/invalid_username')
-              .expect(400)
+              .expect(404)
               .then(({ body }) => {
-                expect(body.msg).to.eql('Bad Request');
+                expect(body.msg).to.eql('Not Found');
+              });
+          });
+          it('GET status:404 - returns Bad Request when passed valid a username that doesn\'t exist', () => {
+            return request(app)
+              .get('/api/users/9999')
+              .expect(404)
+              .then(({ body }) => {
+                expect(body.msg).to.eql('Not Found');
               });
           });
         });
