@@ -313,15 +313,23 @@ describe('/', () => {
               .get('/api/articles/1/comments')
               .expect(200)
               .then(({ body }) => {
-                expect(body.comments).to.have.lengthOf(13);
+                expect(body.comments).to.have.lengthOf(10);
               })
           });
-          it('GET status:404 - returns an empty array when passed a valid id that doesn\'t have any comments', () => {
+          it('GET status:200 - returns an empty array when passed a valid id that doesn\'t have any comments', () => {
             return request(app)
               .get('/api/articles/2/comments')
               .expect(200)
               .then(({ body }) => {
                 expect(body.comments).to.eql([]);
+              });
+          });
+          it('GET status:404 - returns an empty array when passed a valid id that doesn\'t have any comments', () => {
+            return request(app)
+              .get('/api/articles/not_valid_id/comments')
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.msg).to.eql('Invalid Input');
               });
           });
           it('POST status:201 and returns an array with the comments added to the database', () => {
@@ -336,10 +344,33 @@ describe('/', () => {
           });
           it('GET status:200 - returns an array of comments accepting page and limit querys', () => {
             return request(app)
-              .get('/api/articles/1/comments?limit=4&p=3')
+              .get('/api/articles/1/comments?limit=3&p=3')
               .expect(200)
               .then(({ body }) => {
-                expect(body.comments).to.have.lengthOf(4);
+                expect(body.comments).to.have.lengthOf(3);
+                expect(body.comments).to.eql([
+                  {
+                    "comment_id": 8,
+                    "author": "icellusedkars",
+                    "votes": 0,
+                    "created_at": "2010-10-23T23:00:00.000Z",
+                    "body": "Delicious crackerbreads"
+                  },
+                  {
+                    "comment_id": 9,
+                    "author": "icellusedkars",
+                    "votes": 0,
+                    "created_at": "2009-10-23T23:00:00.000Z",
+                    "body": "Superficially charming"
+                  },
+                  {
+                    "comment_id": 10,
+                    "author": "icellusedkars",
+                    "votes": 0,
+                    "created_at": "2008-10-23T23:00:00.000Z",
+                    "body": "git push origin master"
+                  }
+                ]);
               });
           });
           describe('Invalid article ids', () => {

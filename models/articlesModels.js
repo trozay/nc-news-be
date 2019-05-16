@@ -34,16 +34,11 @@ exports.updateArticleById = ({ article_id }, { inc_votes }) => {
     .returning('*');
 };
 
-exports.fetchCommentsByArticleId = ({ article_id }, { sort_by = 'created_at', order = 'desc', limit = 10, p }) => {
+exports.fetchCommentsByArticleId = ({ article_id }, { sort_by = 'created_at', order = 'desc', limit = 10, p = 1 }) => {
   return connection('comments').select('comment_id', 'author', 'votes', 'created_at', 'body')
     .where('comments.article_id', article_id)
-    .modify(query => {
-      if (p) {
-        const startingPoint = (p - 1) * limit;
-        query.offset(startingPoint);
-      };
-    })
     .orderBy(sort_by, order)
+    .offset((p - 1) * limit)
     .limit(limit)
 };
 
