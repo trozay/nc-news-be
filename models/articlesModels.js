@@ -37,7 +37,7 @@ exports.fetchCommentsByArticleId = ({ article_id }, { sort_by = 'created_at', or
     .orderBy(sort_by, order);
 };
 
-exports.inserCommentByArticleId = ({ article_id }, { username, body }) => {
+exports.insertCommentByArticleId = ({ article_id }, { username, body }) => {
   return connection('comments')
     .insert({ author: username, body, article_id })
     .returning('*');
