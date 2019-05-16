@@ -9,7 +9,7 @@ exports.fetchTotalArticlesCount = ({ author, topic }) => {
     });
 };
 
-exports.fetchAllArticles = ({ sort_by = 'articles.created_at', order = 'desc', author, topic, limit = 10, p }) => {
+exports.fetchAllArticles = ({ sort_by = 'articles.created_at', order = 'desc', author, topic, limit = 10, p = 1 }) => {
   return connection.select('articles.*')
     .count('comments.article_id as comment_count')
     .from('articles')

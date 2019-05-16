@@ -6,7 +6,10 @@ exports.getAllArticles = (req, res, next) => {
       if (articles.length === 0) return Promise.reject({ code: 404 });
       return Promise.all([articles, fetchTotalArticlesCount(req.query)])
     })
-    .then(([articles, total_count]) => res.send({ total_count: `Page ${req.query.p} of ${total_count[0].total_count} articles`, articles }))
+    .then(([articles, total_count]) => {
+      if (!req.query.p) req.query.p = 1;
+      res.send({ total_count: `Page ${req.query.p || 1} of ${total_count[0].total_count} articles`, articles })
+    })
     .catch(next);
 };
 
