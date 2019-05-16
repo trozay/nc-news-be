@@ -1,5 +1,14 @@
 const connection = require('../db/connection');
 
+exports.fetchTotalArticlesCount = ({ author, topic }) => {
+  return connection('articles')
+    .count('article_id as total_count')
+    .modify(query => {
+      if (author) query.where('author', author);
+      if (topic) query.where('topic', topic);
+    });
+};
+
 exports.fetchAllArticles = ({ sort_by = 'articles.created_at', order = 'desc', author, topic, limit = 10, p }) => {
   return connection.select('articles.*')
     .count('comments.article_id as comment_count')

@@ -1,11 +1,12 @@
-const { fetchAllArticles, fetchArticleById, updateArticleById, fetchCommentsByArticleId, insertCommentByArticleId, insertArticle, removeArticleById } = require('../models/articlesModels');
+const { fetchAllArticles, fetchArticleById, updateArticleById, fetchCommentsByArticleId, insertCommentByArticleId, insertArticle, removeArticleById, fetchTotalArticlesCount } = require('../models/articlesModels');
 
 exports.getAllArticles = (req, res, next) => {
   fetchAllArticles(req.query)
     .then(articles => {
       if (articles.length === 0) return Promise.reject({ code: 404 });
-      res.send({ articles });
+      return Promise.all([articles, fetchTotalArticlesCount(req.query)])
     })
+    .then(([articles, total_count]) => res.send({ total_count: total_count[0].total_count, articles }))
     .catch(next);
 };
 
