@@ -7,7 +7,8 @@ const {
   insertArticle,
   removeArticleById,
   fetchTotalArticlesCount,
-  fetchTotalCommentsCount
+  fetchTotalCommentsCount,
+  checkArticleExists
 } = require('../models/articlesModels');
 
 exports.getAllArticles = (req, res, next) => {
@@ -30,9 +31,18 @@ exports.getAllArticles = (req, res, next) => {
 exports.getCommentsByArticleId = (req, res, next) => {
   fetchCommentsByArticleId(req.params, req.query)
     .then(comments => {
-      return Promise.all([comments, fetchTotalCommentsCount(req.query, req.params)])
+      return Promise.all([comments, fetchTotalCommentsCount(req.query, req.params), checkArticleExists(req.params)])
     })
-    .then(([comments, total_count]) => {
+    .then(([comments, total_count, check]) => {
+      if (check.length === 0) {
+        return Promise.reject({
+          code: 404
+        });
+      }
+      if (req.query.p && comments.length === 0) return Promise.reject({
+        code: 404,
+        msg: 'No More Comments'
+      });
       res.send({
         total_count: `Page ${req.query.p || 1} of ${total_count[0].total_count} comments`,
         comments

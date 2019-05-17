@@ -1,5 +1,15 @@
 const connection = require('../db/connection');
 
+exports.checkArticleExists = ({
+  article_id
+}) => {
+  return connection.select('*')
+    .from('articles')
+    .where({
+      article_id
+    });
+};
+
 exports.fetchTotalArticlesCount = ({
   author,
   topic
