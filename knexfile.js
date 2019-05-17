@@ -16,6 +16,7 @@ const customConfigs = {
     connection: `${DB_URL}?ssl=true`,
   },
   development: {
+    JWT_SECRET: 'secret key',
     connection: {
       database: 'nc_news',
       // username: "",
@@ -23,6 +24,7 @@ const customConfigs = {
     },
   },
   test: {
+    JWT_SECRET: 'secret key',
     connection: {
       database: 'nc_news_test',
       // username: "",

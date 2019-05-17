@@ -35,6 +35,21 @@ describe('/', () => {
           });
       });
     });
+    describe.only('/login', () => {
+      it('POST responds with an access token given correct username and password', () =>
+        request(app)
+          .post('/api/login')
+          .send({
+            username: 'mitch',
+            password: 'secure123'
+          })
+          .expect(200)
+          .then(({
+            body
+          }) => {
+            expect(body).to.have.ownProperty('token');
+          }));
+    });
     describe('topics', () => {
       describe('RouteNotFound', () => {
         it('GET status:404 - returns Route Not Found', () => {
@@ -160,35 +175,35 @@ describe('/', () => {
           }) => {
             expect(body.articles).to.have.lengthOf(3);
             expect(body.articles).to.eql([{
-                article_id: 7,
-                title: 'Z',
-                topic: 'mitch',
-                author: 'icellusedkars',
-                body: 'I was hungry.',
-                votes: 0,
-                created_at: "1994-10-20T23:00:00.000Z",
-                comment_count: "0"
-              },
-              {
-                article_id: 8,
-                title: 'Does Mitch predate civilisation?',
-                topic: 'mitch',
-                author: 'icellusedkars',
-                body: 'Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!',
-                votes: 0,
-                created_at: "1990-10-21T23:00:00.000Z",
-                comment_count: "0"
-              },
-              {
-                article_id: 9,
-                title: "They're not exactly dogs, are they?",
-                topic: 'mitch',
-                author: 'butter_bridge',
-                body: 'Well? Think about it.',
-                votes: 0,
-                created_at: "1986-10-22T23:00:00.000Z",
-                comment_count: "2"
-              }
+              article_id: 7,
+              title: 'Z',
+              topic: 'mitch',
+              author: 'icellusedkars',
+              body: 'I was hungry.',
+              votes: 0,
+              created_at: "1994-10-20T23:00:00.000Z",
+              comment_count: "0"
+            },
+            {
+              article_id: 8,
+              title: 'Does Mitch predate civilisation?',
+              topic: 'mitch',
+              author: 'icellusedkars',
+              body: 'Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!',
+              votes: 0,
+              created_at: "1990-10-21T23:00:00.000Z",
+              comment_count: "0"
+            },
+            {
+              article_id: 9,
+              title: "They're not exactly dogs, are they?",
+              topic: 'mitch',
+              author: 'butter_bridge',
+              body: 'Well? Think about it.',
+              votes: 0,
+              created_at: "1986-10-22T23:00:00.000Z",
+              comment_count: "2"
+            }
             ])
           });
       });
@@ -445,26 +460,26 @@ describe('/', () => {
               }) => {
                 expect(body.comments).to.have.lengthOf(3);
                 expect(body.comments).to.eql([{
-                    "comment_id": 8,
-                    "author": "icellusedkars",
-                    "votes": 0,
-                    "created_at": "2010-10-23T23:00:00.000Z",
-                    "body": "Delicious crackerbreads"
-                  },
-                  {
-                    "comment_id": 9,
-                    "author": "icellusedkars",
-                    "votes": 0,
-                    "created_at": "2009-10-23T23:00:00.000Z",
-                    "body": "Superficially charming"
-                  },
-                  {
-                    "comment_id": 10,
-                    "author": "icellusedkars",
-                    "votes": 0,
-                    "created_at": "2008-10-23T23:00:00.000Z",
-                    "body": "git push origin master"
-                  }
+                  "comment_id": 8,
+                  "author": "icellusedkars",
+                  "votes": 0,
+                  "created_at": "2010-10-23T23:00:00.000Z",
+                  "body": "Delicious crackerbreads"
+                },
+                {
+                  "comment_id": 9,
+                  "author": "icellusedkars",
+                  "votes": 0,
+                  "created_at": "2009-10-23T23:00:00.000Z",
+                  "body": "Superficially charming"
+                },
+                {
+                  "comment_id": 10,
+                  "author": "icellusedkars",
+                  "votes": 0,
+                  "created_at": "2008-10-23T23:00:00.000Z",
+                  "body": "git push origin master"
+                }
                 ]);
               });
           });
