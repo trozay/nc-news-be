@@ -30,7 +30,7 @@ exports.getAllArticles = (req, res, next) => {
 exports.getCommentsByArticleId = (req, res, next) => {
   fetchCommentsByArticleId(req.params, req.query)
     .then(comments => {
-      return Promise.all([comments, fetchTotalCommentsCount(req.query, req.query)])
+      return Promise.all([comments, fetchTotalCommentsCount(req.query, req.params)])
     })
     .then(([comments, total_count]) => {
       res.send({
