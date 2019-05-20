@@ -4,8 +4,14 @@ This is an api project I built, that gives information, I have inserted into a d
 
 # Installing
 
+A step by step series of examples that tell you how to get my development env running
+
+
+Install express for the servers and mocha/chai for testing.
 ```
 npm i express mochai chai
+``
+```
 npm i nodemon -D
 npm i supertest -D
 ```
