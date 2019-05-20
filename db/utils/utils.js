@@ -21,20 +21,24 @@ exports.createRef = (arr, key) => {
 
 exports.renameKeys = (arr, keyToChange, newKey) => {
   return arr.map(item => {
-    const { [keyToChange]: oldKey, ...rest } = item;
-    return { [newKey]: oldKey, ...rest };
+    const {
+      [keyToChange]: oldKey, ...rest
+    } = item;
+    return {
+      [newKey]: oldKey,
+      ...rest
+    };
   });
 };
 
 exports.formatArr = (arr, ref) => {
   return arr.map(item => {
     return {
-      author: item.author, article_id: ref[item.article_id], votes: item.votes, created_at: item.created_at, body: item.body
+      author: item.author,
+      article_id: ref[item.article_id],
+      votes: item.votes,
+      created_at: item.created_at,
+      body: item.body
     }
   });
-};
-
-exports.pagination = (items, limit, page) => {
-  const startingPoint = (page - 1) * limit;
-  return items.filter((item, index) => index >= startingPoint && index < startingPoint + 5);
 };
