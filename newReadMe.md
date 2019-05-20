@@ -44,3 +44,6 @@ Refer to the hosting.md file to see how to deploy this server on heroku.
 * [Express](https://expressjs.com/) - API Framework
 * [Supertest](https://www.npmjs.com/package/supertest) - Test Library
 * [Knex](https://knexjs.org/) - Query Builder Framework
+
+ # Author
+ Thomas Robinson
