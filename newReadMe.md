@@ -10,6 +10,10 @@ Install express for the servers and mocha/chai for testing.
 ```
 npm i express mocha chai
 ```
+Install postgres for the databases.
+```
+npm i pg
+```
 We also need supertest to test out routers and endpoints.
 ```
 npm i supertest -D
@@ -21,13 +25,22 @@ npm i nodemon -D
 
 # Running the tests
 
-Run all tests available
+Run all tests available: these tests a variety of different end points and make sure the correct information is given back, there are also error handling tests on each endpoint dealing with a variety of different things that can go wrong.
 ```
 run npm test
 ```
 
 How to start server
-
 ```
 run npm dev -- nodemon listen.js
 ```
+
+# Deployment
+
+Refer to the hosting.md file to see how to deploy this server on heroku.
+
+# Built With
+
+[Express](https://expressjs.com/) - API Framework
+[Supertest](https://www.npmjs.com/package/supertest) - Test Library
+[Knex](https://knexjs.org/) - Query Builder Framework
