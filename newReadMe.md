@@ -16,21 +16,21 @@ We also need supertest to test out routers and endpoints.
 ```
 npm i supertest -D
 ```
-Nodemon will update your server every time you save your file instead of restarting the server
+Nodemon will update your server when you save your file instead of restarting the server every time.
 ```
 npm i nodemon -D
 ```
 
 # Running the tests
 
-Run all tests available: these tests a variety of different end points and make sure the correct information is given back, there are also error handling tests on each endpoint dealing with a variety of different things that can go wrong.
+Run all tests available: these test a variety of different end points and make sure the correct information is given back, there are also error handling tests for each endpoint dealing with all the different things I could think of that could go wrong.
 ```
 run npm test
 ```
 
 How to start server
 ```
-run npm dev -- nodemon listen.js
+run npm dev - nodemon listen.js
 ```
 # Deployment
 
