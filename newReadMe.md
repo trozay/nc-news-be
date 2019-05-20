@@ -4,8 +4,6 @@ This is an api project I built, that gives information, I have inserted into a d
 
 # Installing
 
-A step by step series of examples that tell you how to get my development env running
-
 Install express for the servers and mocha/chai for testing.
 ```
 npm i express mocha chai
@@ -34,7 +32,6 @@ How to start server
 ```
 run npm dev -- nodemon listen.js
 ```
-
 # Deployment
 
 Refer to the hosting.md file to see how to deploy this server on heroku.
