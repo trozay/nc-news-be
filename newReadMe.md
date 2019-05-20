@@ -6,13 +6,15 @@ This is an api project I built, that gives information, I have inserted into a d
 
 A step by step series of examples that tell you how to get my development env running
 
-
 Install express for the servers and mocha/chai for testing.
 ```
-npm i express mochai chai
-``
+npm i express mocha chai
 ```
-npm i nodemon -D
+We also need supertest to test out routers and endpoints.
+```
 npm i supertest -D
 ```
-
+Nodemon will update your server every time you save your file instead of restarting the server
+```
+npm i nodemon -D
+```
