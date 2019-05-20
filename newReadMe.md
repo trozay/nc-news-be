@@ -1,6 +1,6 @@
 # Northcoders News API
 
-This is an api project I built, that gives information, I have inserted into a database. The available end points are /articles, /topics, /users, /articles/comments, /comments/comment_id. The relevant end points also accept queries to sort by any available column, asc/desc, filter down to articles written by a specific author, after or before a date etc. My api is a RESTful server, allowing the user to create,read, update and delete files.
+This is an api project I built, that gives information, I have inserted into a database. The available end points are articles, topics, users, articles/comments, comments/comment_id. The relevant end points also accept queries to sort by any available column, asc/desc, filter down to articles written by a specific author, after or before a date etc. My api is a RESTful server, allowing the user to create,read, update and delete files.
 
 # Installing
 
@@ -17,4 +17,17 @@ npm i supertest -D
 Nodemon will update your server every time you save your file instead of restarting the server
 ```
 npm i nodemon -D
+```
+
+# Running the tests
+
+Run all tests available
+```
+run npm test
+```
+
+How to start server
+
+```
+run npm dev -- nodemon listen.js
 ```
