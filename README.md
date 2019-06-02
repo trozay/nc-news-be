@@ -30,7 +30,7 @@ run npm test
 
 How to start server
 ```
-run npm dev - nodemon listen.js
+run npm dev
 ```
 # Deployment
 
