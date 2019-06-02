@@ -21,7 +21,7 @@ Nodemon will update your server when you save your file instead of restarting th
 npm i nodemon -D
 ```
 
-# Running the tests
+# Running the tests.
 
 Run all tests available: these test a variety of different end points and make sure the correct information is given back, there are also error handling tests for each endpoint dealing with all the different things I could think of that could go wrong.
 ```
