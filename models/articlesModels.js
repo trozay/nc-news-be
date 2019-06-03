@@ -47,7 +47,7 @@ exports.fetchAllArticles = ({
   limit = 10,
   p = 1
 }) => {
-  return connection.select('articles.*')
+  return connection.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.title', 'articles.topic', 'articles.votes')
     .count('comments.article_id as comment_count')
     .from('articles')
     .leftJoin('comments', 'comments.article_id', 'articles.article_id')

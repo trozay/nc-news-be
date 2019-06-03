@@ -122,7 +122,7 @@ describe('/', () => {
           });
       });
     });
-    describe('articles', () => {
+    describe.only('articles', () => {
       it('GET status:200 - returns an array of article objects', () => {
         return request(app)
           .get('/api/articles')
@@ -179,9 +179,8 @@ describe('/', () => {
               title: 'Z',
               topic: 'mitch',
               author: 'icellusedkars',
-              body: 'I was hungry.',
               votes: 0,
-              created_at: "1994-10-20T23:00:00.000Z",
+              created_at: "1994-10-21",
               comment_count: "0"
             },
             {
@@ -189,9 +188,8 @@ describe('/', () => {
               title: 'Does Mitch predate civilisation?',
               topic: 'mitch',
               author: 'icellusedkars',
-              body: 'Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!',
               votes: 0,
-              created_at: "1990-10-21T23:00:00.000Z",
+              created_at: "1990-10-22",
               comment_count: "0"
             },
             {
@@ -199,9 +197,8 @@ describe('/', () => {
               title: "They're not exactly dogs, are they?",
               topic: 'mitch',
               author: 'butter_bridge',
-              body: 'Well? Think about it.',
               votes: 0,
-              created_at: "1986-10-22T23:00:00.000Z",
+              created_at: "1986-10-23",
               comment_count: "2"
             }
             ])
@@ -227,7 +224,7 @@ describe('/', () => {
               topic: 'paper',
               votes: 0,
               author: 'lurker',
-              created_at: '2019-05-16T23:00:00.000Z'
+              created_at: '2019-05-16'
             })
           });
       });
@@ -310,7 +307,7 @@ describe('/', () => {
                 topic: 'mitch',
                 author: 'butter_bridge',
                 body: 'I find this existence challenging',
-                created_at: "2018-10-14T23:00:00.000Z",
+                created_at: "2018-10-15",
                 comment_count: '13',
                 votes: 100,
               });
@@ -463,21 +460,21 @@ describe('/', () => {
                   "comment_id": 8,
                   "author": "icellusedkars",
                   "votes": 0,
-                  "created_at": "2010-10-23T23:00:00.000Z",
+                  "created_at": "2010-10-24",
                   "body": "Delicious crackerbreads"
                 },
                 {
                   "comment_id": 9,
                   "author": "icellusedkars",
                   "votes": 0,
-                  "created_at": "2009-10-23T23:00:00.000Z",
+                  "created_at": "2009-10-24",
                   "body": "Superficially charming"
                 },
                 {
                   "comment_id": 10,
                   "author": "icellusedkars",
                   "votes": 0,
-                  "created_at": "2008-10-23T23:00:00.000Z",
+                  "created_at": "2008-10-24",
                   "body": "git push origin master"
                 }
                 ]);
