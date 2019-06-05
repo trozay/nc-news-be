@@ -21,7 +21,7 @@ exports.getAllArticles = (req, res, next) => {
     })
     .then(([articles, total_count]) => {
       res.send({
-        total_count: `Page ${req.query.p || 1} of ${total_count[0].total_count} articles`,
+        total_count: total_count[0].total_count,
         articles
       })
     })
