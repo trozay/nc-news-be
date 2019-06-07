@@ -85,7 +85,6 @@ exports.postCommentByArticleId = (req, res, next) => {
 };
 
 exports.postArticle = (req, res, next) => {
-  console.log(req.body)
   insertArticle(req.body)
     .then(article => res.status(201).send({
       article: article[0]

@@ -6,8 +6,7 @@ exports.convertTimeStamp = (arr) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const day = date.getDate();
-    newObj.created_at = `${year}-${month}-${day}`;
-    console.log(newObj.created_at)
+    newObj.created_at = `${year}-${month + 1}-${day}`;
     return newObj;
   })
 };
@@ -18,7 +17,7 @@ exports.convertSingleTimeStamp = (timestamp) => {
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate();
-  newDate = `${year}-${month}-${day}`;
+  newDate = `${year}-${month + 1}-${day}`;
   return newDate;
 };
 

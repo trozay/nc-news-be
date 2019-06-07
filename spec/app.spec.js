@@ -35,21 +35,6 @@ describe('/', () => {
           });
       });
     });
-    describe.only('/login', () => {
-      it('POST responds with an access token given correct username and password', () =>
-        request(app)
-          .post('/api/login')
-          .send({
-            username: 'mitch',
-            password: 'secure123'
-          })
-          .expect(200)
-          .then(({
-            body
-          }) => {
-            expect(body).to.have.ownProperty('token');
-          }));
-    });
     describe('topics', () => {
       describe('RouteNotFound', () => {
         it('GET status:404 - returns Route Not Found', () => {
@@ -180,7 +165,7 @@ describe('/', () => {
               topic: 'mitch',
               author: 'icellusedkars',
               votes: 0,
-              created_at: "1994-10-21",
+              created_at: "1994-11-21T00:00:00.000Z",
               comment_count: "0"
             },
             {
@@ -189,7 +174,7 @@ describe('/', () => {
               topic: 'mitch',
               author: 'icellusedkars',
               votes: 0,
-              created_at: "1990-10-22",
+              created_at: "1990-11-22T00:00:00.000Z",
               comment_count: "0"
             },
             {
@@ -198,7 +183,7 @@ describe('/', () => {
               topic: 'mitch',
               author: 'butter_bridge',
               votes: 0,
-              created_at: "1986-10-23",
+              created_at: "1986-11-23T00:00:00.000Z",
               comment_count: "2"
             }
             ])
@@ -224,7 +209,7 @@ describe('/', () => {
               topic: 'paper',
               votes: 0,
               author: 'lurker',
-              created_at: '2019-05-16'
+              created_at: '2019-06-06T23:00:00.000Z'
             })
           });
       });
@@ -307,7 +292,7 @@ describe('/', () => {
                 topic: 'mitch',
                 author: 'butter_bridge',
                 body: 'I find this existence challenging',
-                created_at: "2018-10-15",
+                created_at: "2018-11-15T00:00:00.000Z",
                 comment_count: '13',
                 votes: 100,
               });
@@ -460,21 +445,21 @@ describe('/', () => {
                   "comment_id": 8,
                   "author": "icellusedkars",
                   "votes": 0,
-                  "created_at": "2010-10-24",
+                  "created_at": "2010-11-24T00:00:00.000Z",
                   "body": "Delicious crackerbreads"
                 },
                 {
                   "comment_id": 9,
                   "author": "icellusedkars",
                   "votes": 0,
-                  "created_at": "2009-10-24",
+                  "created_at": "2009-11-24T00:00:00.000Z",
                   "body": "Superficially charming"
                 },
                 {
                   "comment_id": 10,
                   "author": "icellusedkars",
                   "votes": 0,
-                  "created_at": "2008-10-24",
+                  "created_at": "2008-11-24T00:00:00.000Z",
                   "body": "git push origin master"
                 }
                 ]);
