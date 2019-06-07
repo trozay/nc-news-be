@@ -1,3 +1,5 @@
+const { convertSingleTimeStamp } = require('../utils/utils');
+
 exports.up = function (knex, Promise) {
   return knex.schema.createTable('articles', (articlesTable) => {
     articlesTable.increments('article_id');
@@ -6,7 +8,7 @@ exports.up = function (knex, Promise) {
     articlesTable.integer('votes').defaultTo(0);
     articlesTable.string('topic').references('topics.slug').notNullable();
     articlesTable.string('author').references('users.username').notNullable();
-    articlesTable.string('created_at').defaultTo(Date.now());
+    articlesTable.datetime('created_at').defaultTo(convertSingleTimeStamp(Date.now()));
   });
 };
 

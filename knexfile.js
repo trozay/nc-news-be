@@ -14,11 +14,15 @@ const baseConfig = {
 const customConfigs = {
   production: {
     connection: `${DB_URL}?ssl=true`,
+    timezone: 'UTC',
+    dateStrings: true
   },
   development: {
     JWT_SECRET: 'secret key',
     connection: {
       database: 'nc_news',
+      timezone: 'UTC',
+      dateStrings: true
       // username: "",
       // password: "",
     },
@@ -27,6 +31,8 @@ const customConfigs = {
     JWT_SECRET: 'secret key',
     connection: {
       database: 'nc_news_test',
+      timezone: 'UTC',
+      dateStrings: true
       // username: "",
       // password: "",
     },
