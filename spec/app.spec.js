@@ -36,18 +36,6 @@ describe('/', () => {
       });
     });
     describe('topics', () => {
-      describe('RouteNotFound', () => {
-        it('GET status:404 - returns Route Not Found', () => {
-          return request(app)
-            .get('/api/topics/dgdgfd')
-            .expect(404)
-            .then(({
-              body
-            }) => {
-              expect(body.msg).to.eql('Route Not Found')
-            });
-        });
-      });
       describe('MethodNotAllowed', () => {
         it('returns 405 when given a bad method', () => {
           return request(app)
@@ -106,8 +94,18 @@ describe('/', () => {
             expect(body.msg).to.eql('Input cannot be null');
           });
       });
+      it('DELETE status:204 - when given a topic slug to delete', () => {
+        return request(app)
+          .delete('/api/topics/paper')
+          .expect(204)
+      });
+      it('DELETE status:404 - when given a valid topic slug that doesn\'t exist', () => {
+        return request(app)
+          .delete('/api/topics/not_valid')
+          .expect(404)
+      });
     });
-    describe.only('articles', () => {
+    describe('articles', () => {
       it('GET status:200 - returns an array of article objects', () => {
         return request(app)
           .get('/api/articles')
@@ -209,7 +207,7 @@ describe('/', () => {
               topic: 'paper',
               votes: 0,
               author: 'lurker',
-              created_at: '2019-06-06T23:00:00.000Z'
+              created_at: '2019-06-12T23:00:00.000Z'
             })
           });
       });
@@ -672,6 +670,16 @@ describe('/', () => {
             }) => {
               expect(body.user.username).to.eql('lurker');
             });
+        });
+        it('DELETE status: 204 - returns status code 204 when successfully deletes user', () => {
+          return request(app)
+            .delete('/api/users/lurker')
+            .expect(204);
+        });
+        it('DELETE status: 404 - returns status 404 when passed a valid username that doesn\'t exist', () => {
+          return request(app)
+            .delete('/api/users/not_valid')
+            .expect(404);
         });
         describe('Invalid username', () => {
           it('GET status:404 - returns Bad Request when passed an invalid username that doesn\'t exist', () => {

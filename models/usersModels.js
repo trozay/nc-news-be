@@ -9,3 +9,9 @@ exports.fetchUserById = ({ username }) => {
     .select('*')
     .where('username', username);
 };
+
+exports.removeUser = ({ username }) => {
+  return connection('users')
+    .where('username', username)
+    .del();
+};

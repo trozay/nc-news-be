@@ -1,4 +1,4 @@
-const { fetchAllUsers, fetchUserById } = require('../models/usersModels');
+const { fetchAllUsers, fetchUserById, removeUser } = require('../models/usersModels');
 
 exports.getAllUsers = (req, res, next) => {
   fetchAllUsers()
@@ -11,6 +11,17 @@ exports.getUserById = (req, res, next) => {
     .then(user => {
       if (user.length === 0) return Promise.reject({ code: 404 });
       res.send({ user: user[0] });
+    })
+    .catch(next);
+};
+
+exports.deleteUser = (req, res, next) => {
+  removeUser(req.params)
+    .then(numOfDeletions => {
+      if (numOfDeletions < 1) return Promise.reject({
+        code: 404
+      })
+      res.sendStatus(204);
     })
     .catch(next);
 };
