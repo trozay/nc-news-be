@@ -6,7 +6,7 @@ This is an api project I built, that gives information, I have inserted into a d
 
 Install express for the servers and mocha/chai for testing.
 ```
-npm i express mocha chai
+npm i express mocha chai.
 ```
 Install postgres for the databases.
 ```
