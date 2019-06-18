@@ -2,12 +2,12 @@ module.exports = [
   {
     username: 'tickle122',
     name: 'Tom Tickle',
-    avatar_url: 'https://www.spiritsurfers.net/monastery/wp-content/uploads/_41500270_mrtickle.jpg',
+    avatar_url: 'http://chittagongit.com/images/default-user-icon/default-user-icon-5.jpg',
   },
   {
     username: 'grumpy19',
     name: 'Paul Grump',
-    avatar_url: 'https://www.tumbit.com/profile-image/4/original/mr-grumpy.jpg',
+    avatar_url: 'http://chittagongit.com/images/default-user-icon/default-user-icon-5.jpg',
   },
   {
     username: 'happyamy2016',
