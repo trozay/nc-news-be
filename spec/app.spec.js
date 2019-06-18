@@ -694,7 +694,7 @@ describe('/', () => {
           });
           it('GET status:404 - returns Bad Request when passed valid a username that doesn\'t exist', () => {
             return request(app)
-              .get('/api/users/9999')
+              .get('/api/users/99999')
               .expect(404)
               .then(({
                 body
