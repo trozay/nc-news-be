@@ -1,0 +1,14 @@
+FROM node:latest
+
+WORKDIR /usr/www/app/
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+# below command runs migrations, seeds and starts. For first run
+# CMD [npm run migrate:latest && npm run seed && npm start"]
+
+CMD ["npm", "start"]

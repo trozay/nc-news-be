@@ -12,9 +12,10 @@
     "seed": "knex seed:run",
     "dev": "nodemon listen.js",
     "start": "node listen.js",
+    "setup-docker-db": "npm run migrate-latest && NODE_ENV=docker npm run seed && npm start",
     "seed:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex seed:run",
     "migrate:latest:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:latest",
-    "migrate:rollback:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback"
+    "migrate:rollback:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback",
   },
   "author": "",
   "license": "ISC",

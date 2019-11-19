@@ -37,6 +37,12 @@ const customConfigs = {
       // password: "",
     },
   },
+  docker: {
+    connection: {
+      host: "nc_news",
+      database: "nc_news",
+    }
+  },
 };
 
 module.exports = { ...baseConfig, ...customConfigs[ENV] };

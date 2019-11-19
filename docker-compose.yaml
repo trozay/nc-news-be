@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+  nc_news:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: nc_news
+    ports:
+      - "5432:5432"
+
+  express_server:
+    build: .
+    environment:
+      NODE_ENV: docker
+    depends_on:
+      - nc_news
+    ports:
+      - "4000:9090"
